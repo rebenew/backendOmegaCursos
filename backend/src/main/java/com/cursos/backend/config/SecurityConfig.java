@@ -2,6 +2,7 @@ package com.cursos.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableWebSecurity
+@Profile("dev")
 public class SecurityConfig{
 
     // Usuario de prueba con rol ADMIN
@@ -41,7 +43,8 @@ public class SecurityConfig{
                         .requestMatchers("/courses/**").authenticated() // protege endpoints de cursos
                         .anyRequest().permitAll() // otros endpoints son públicos
                 )
-                .httpBasic(Customizer.withDefaults()); // Autenticación básica
+                .httpBasic(AbstractHttpConfigurer::disable) // auth básica desactivada
+                .formLogin(AbstractHttpConfigurer::disable); //Login por formulario desactivado
 
         return http.build();
     }
