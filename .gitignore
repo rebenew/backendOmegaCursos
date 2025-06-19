@@ -1,0 +1,66 @@
+# ⚙️ Archivos de IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# 🛠️ Configuración del sistema operativo
+.DS_Store
+Thumbs.db
+
+# 🚫 Archivos de compilación
+/build/
+target/
+out/
+
+# 🐘 Gradle
+.gradle/
+!gradle-wrapper.jar
+build/
+
+# 🧪 Logs y bases de datos temporales
+*.log
+*.db
+*.sqlite
+
+# ☕ Maven
+.mvn/
+!**/mvnw
+!**/mvnw.cmd
+
+# 🔐 Archivos de entorno / variables
+.env
+*.env
+
+# 🌍 Archivos de sistema
+*.class
+
+# ⚙️ Configuración de Eclipse (por si alguien lo usa)
+.project
+.classpath
+.settings/
+
+# 📦 Archivos de empaquetado
+*.jar
+*.war
+*.ear
+
+# 🔄 Archivos temporales
+*.swp
+*.tmp
+*.bak
+
+# 📁 Archivos de cobertura de pruebas
+jacoco.exec
+coverage/
+
+# 🧪 Test reports
+/test-output/
+/surefire-reports/
+/test-results/
+
+# VS Code (por si usas ambos IDEs)
+.vscode/
+
+# ⚠️ Configuración sensible de Spring Boot
+src/main/resources/application.properties
