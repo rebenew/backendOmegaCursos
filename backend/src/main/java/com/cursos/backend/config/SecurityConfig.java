@@ -43,7 +43,7 @@ public class SecurityConfig{
                         .requestMatchers("/courses/**").authenticated() // protege endpoints de cursos
                         .anyRequest().permitAll() // otros endpoints son públicos
                 )
-                .httpBasic(AbstractHttpConfigurer::disable) // auth básica desactivada
+                .httpBasic(Customizer.withDefaults()) // auth básica habilitada
                 .formLogin(AbstractHttpConfigurer::disable); //Login por formulario desactivado
 
         return http.build();
