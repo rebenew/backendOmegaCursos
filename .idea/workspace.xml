@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e365ed7a-5b34-4468-b678-542ec445a6b5" name="Changes" comment="servicio del tag">
-      <change afterPath="$PROJECT_DIR$/.idea/backendOmegaCursos.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="e365ed7a-5b34-4468-b678-542ec445a6b5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/dto/CourseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/model/Tag.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/repository/TagRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/model/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/model/Course.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/model/Modality.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/model/Modality.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,8 +44,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/rebenew/backendOmegaCursos.git&quot;,
-    &quot;accountId&quot;: &quot;64f386ba-e6c7-481c-97bb-16dd7836f9c8&quot;
+    &quot;url&quot;: &quot;https://github.com/rebenew/backend.git&quot;,
+    &quot;accountId&quot;: &quot;4e365534-4ef7-4c7b-9373-3bf93e055821&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -52,21 +57,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.BackendApplication.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "vivianadev",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/vivis/Documents/NODO/reto_back/backendOmegaCursos",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/reben/Downloads/backend&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="BackendApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.cursos.backend.BackendApplication" />
@@ -80,6 +84,17 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="backend" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="backend" />
+      <option name="filePath" />
+      <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
@@ -95,79 +110,6 @@
       <option name="presentableId" value="Default" />
       <updated>1749008225437</updated>
     </task>
-    <task id="LOCAL-00001" summary="model">
-      <option name="closed" value="true" />
-      <created>1750369657464</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1750369657464</updated>
-    </task>
-    <task id="LOCAL-00002" summary="controler con los endpoints de crear, editar, y asociar cursos a tags">
-      <option name="closed" value="true" />
-      <created>1750369735088</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1750369735088</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Resquest">
-      <option name="closed" value="true" />
-      <created>1750369902204</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1750369902204</updated>
-    </task>
-    <task id="LOCAL-00004" summary="lógica del servicio">
-      <option name="closed" value="true" />
-      <created>1750369952311</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1750369952311</updated>
-    </task>
-    <task id="LOCAL-00005" summary="auth basica habilitada">
-      <option name="closed" value="true" />
-      <created>1750370007294</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1750370007294</updated>
-    </task>
-    <task id="LOCAL-00006" summary="modelo del tag">
-      <option name="closed" value="true" />
-      <created>1750370032920</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1750370032920</updated>
-    </task>
-    <task id="LOCAL-00007" summary="controler del tag">
-      <option name="closed" value="true" />
-      <created>1750370046118</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1750370046118</updated>
-    </task>
-    <task id="LOCAL-00008" summary="repositorio del tag">
-      <option name="closed" value="true" />
-      <created>1750370062270</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1750370062270</updated>
-    </task>
-    <task id="LOCAL-00009" summary="servicio del tag">
-      <option name="closed" value="true" />
-      <created>1750370077341</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1750370077341</updated>
-    </task>
-    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -180,32 +122,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="model" />
-    <MESSAGE value="controler con los endpoints de crear, editar, y asociar cursos a tags" />
-    <MESSAGE value="Resquest" />
-    <MESSAGE value="lógica del servicio" />
-    <MESSAGE value="auth basica habilitada" />
-    <MESSAGE value="modelo del tag" />
-    <MESSAGE value="controler del tag" />
-    <MESSAGE value="repositorio del tag" />
-    <MESSAGE value="servicio del tag" />
-    <option name="LAST_COMMIT_MESSAGE" value="servicio del tag" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/backend/src/main/java/com/cursos/backend/service/CourseService.java</url>
-          <line>29</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="org.springframework.beans.factory.BeanCreationException" package="org.springframework.beans.factory" />
-          <option name="timeStamp" value="2" />
-        </breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
