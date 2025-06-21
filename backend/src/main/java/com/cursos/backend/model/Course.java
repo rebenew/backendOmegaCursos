@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Getter
+@Setter
 @Table(name = "courses")
 public class Course {
 
