@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -26,8 +25,9 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public Optional<Course> getCourseById(Long id) {
-        return courseRepository.findById(id);
+    public Course getCourseById(Long id) {
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
     }
 
     @Transactional
@@ -51,14 +51,12 @@ public class CourseService {
     public Course updateCourse(Long id, Course courseDetails) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
-
         course.setTitle(courseDetails.getTitle());
         course.setModality(courseDetails.getModality());
         course.setCertification(courseDetails.getCertification());
         course.setDuration(courseDetails.getDuration());
         course.setDescription(courseDetails.getDescription());
         course.setPrice(courseDetails.getPrice());
-        // Actualizar tags si vienen en la petición
         if (courseDetails.getTags() != null) {
             Set<Tag> tags = new HashSet<>();
             for (Tag tag : courseDetails.getTags()) {
