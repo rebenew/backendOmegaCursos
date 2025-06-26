@@ -40,7 +40,9 @@ public class SecurityConfig{
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF desactivado solo para desarrollo
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/courses/**").authenticated() // protege endpoints de cursos
+                        .requestMatchers("GET", "/courses/**").permitAll() // GET públicos para pruebas
+                        .requestMatchers("GET", "/tags/**").permitAll() // GET públicos para pruebas
+                        .requestMatchers("/courses/**").authenticated() // otros métodos protegidos
                         .anyRequest().permitAll() // otros endpoints son públicos
                 )
                 .httpBasic(Customizer.withDefaults()) // auth básica habilitada
