@@ -1,5 +1,6 @@
 package com.cursos.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -17,6 +18,7 @@ public class Tag {
     private String name;
 
     @ManyToMany(mappedBy = "tags")
+    @JsonBackReference
     private Set<Course> courses = new HashSet<>();
 
     // Constructores

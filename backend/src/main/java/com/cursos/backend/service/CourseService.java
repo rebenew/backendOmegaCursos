@@ -87,4 +87,8 @@ public class CourseService {
         course.setTags(tags);
         return courseRepository.save(course);
     }
+    
+    public boolean existsById(Long id) {
+        return courseRepository.existsById(id);
+    }
 }

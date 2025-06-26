@@ -1,5 +1,7 @@
 package com.cursos.backend.model;
 
+import com.cursos.backend.converter.ModalityConverter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -17,9 +19,9 @@ public class Course {
     @Column(nullable = false)
     private String title;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = ModalityConverter.class)
     @Column(nullable = false)
-    private Modality modality; // ENUM: Presencial, Virtual
+    private Modality modality;
 
     @Column(nullable = false)
     private String certification;
@@ -39,7 +41,9 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @JsonManagedReference
     private Set<Tag> tags = new HashSet<>();
+
 
     // Constructores
     public Course() {}
