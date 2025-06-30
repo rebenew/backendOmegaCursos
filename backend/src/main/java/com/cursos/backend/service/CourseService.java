@@ -25,10 +25,16 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    public List<Course> filterCourses(List<String> tags, String title, String modality) {
+        return courseRepository.findCoursesWithFilters(tags, title, modality);
+    }
+
     public Course getCourseById(Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
     }
+
+
 
     @Transactional
     public Course createCourse(Course course) {

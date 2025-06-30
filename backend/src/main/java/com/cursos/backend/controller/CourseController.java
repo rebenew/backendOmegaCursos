@@ -17,14 +17,19 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
+    public ResponseEntity<List<Course>> getCourses(
+            @RequestParam(required = false) List<String> tags,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String modality) {
         try {
-            List<Course> courses = courseService.getAllCourses();
+            List<Course> courses = courseService.filterCourses(tags, title, modality);
             return ResponseEntity.ok(courses);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCourseById(@PathVariable Long id) {
