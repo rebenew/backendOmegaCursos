@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -26,7 +27,32 @@ public class CourseService {
     }
 
     public List<Course> filterCourses(List<String> tags, String title, String modality) {
-        return courseRepository.findCoursesWithFilters(tags, title, modality);
+        List<Course> allCourses = courseRepository.findAll();
+
+        return allCourses.stream()
+                .filter(course -> {
+                    boolean modalityMatch = (modality == null || modality.isBlank()) ||
+                            course.getModality().name().equalsIgnoreCase(modality);
+
+                    boolean titleMatch = (title == null || title.isBlank()) ||
+                            course.getTitle().toLowerCase().contains(title.toLowerCase());
+
+                    boolean tagsMatch = (tags == null || tags.isEmpty()) ||
+                            course.getTags().stream().anyMatch(courseTag ->
+                                    tags.stream().anyMatch(inputTag -> {
+                                        String courseTagName = courseTag.getName().toLowerCase();
+                                        String inputTagName = inputTag.toLowerCase();
+                                        return courseTagName.contains(inputTagName) || inputTagName.contains(courseTagName);
+                                    })
+                            );
+
+                    if (tagsMatch || titleMatch) {
+                        System.out.println("✅ Coincide: " + course.getTitle());
+                    }
+
+                    return modalityMatch && (titleMatch || tagsMatch);
+                })
+                .collect(Collectors.toList());
     }
 
     public Course getCourseById(Long id) {

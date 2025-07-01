@@ -18,6 +18,7 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<List<Course>> getCourses(
+
             @RequestParam(required = false) List<String> tags,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String modality) {

@@ -44,7 +44,6 @@ public class Course {
     @JsonManagedReference
     private Set<Tag> tags = new HashSet<>();
 
-
     // Constructores
     public Course() {}
 
