@@ -61,21 +61,19 @@ public class CourseService {
     }
 
 
-
     @Transactional
     public Course createCourse(Course course) {
-        Set<Tag> tags = new HashSet<>();
-        if (course.getTags() != null) {
-            for (Tag tag : course.getTags()) {
-                Tag existingTag = tagRepository.findByName(tag.getName()).orElse(null);
-                if (existingTag != null) {
-                    tags.add(existingTag);
-                } else {
-                    tags.add(tagRepository.save(new Tag(tag.getName())));
-                }
+        Set<Tag> resolvedTags = new HashSet<>();
+
+        for (Tag tag : course.getTags()) {
+            if (tag.getId() != null) {
+                Tag existingTag = tagRepository.findById(tag.getId())
+                        .orElseThrow(() -> new RuntimeException("Tag no encontrado con ID: " + tag.getId()));
+                resolvedTags.add(existingTag);
             }
         }
-        course.setTags(tags);
+
+        course.setTags(resolvedTags);
         return courseRepository.save(course);
     }
 

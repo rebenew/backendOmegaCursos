@@ -41,8 +41,8 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    @JsonManagedReference
     private Set<Tag> tags = new HashSet<>();
+
 
     // Constructores
     public Course() {}
