@@ -25,6 +25,10 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    public List<Course> getCoursesByFilters(String category, String level) {
+        return courseRepository.findByCategoryAndLevel(category, level);
+    }
+
     public Course getCourseById(Long id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
@@ -82,12 +86,12 @@ public class CourseService {
     @Transactional
     public Course associateTagsToCourse(Long courseId, Set<Long> tagIds) {
         Course course = courseRepository.findById(courseId)
-            .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + courseId));
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + courseId));
         Set<Tag> tags = new HashSet<>(tagRepository.findAllById(tagIds));
         course.setTags(tags);
         return courseRepository.save(course);
     }
-    
+
     public boolean existsById(Long id) {
         return courseRepository.existsById(id);
     }
