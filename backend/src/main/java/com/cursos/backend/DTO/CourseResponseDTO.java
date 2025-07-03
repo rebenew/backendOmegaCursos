@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CourseDTO {
+public class CourseResponseDTO {
     private Long id;
     private String title;
     private Modality modality;
@@ -19,11 +19,12 @@ public class CourseDTO {
     private BigDecimal price;
     private List<TagDTO> tags;
 
-    public CourseDTO(Long id, String title, Modality modality, String certification, String duration, String description, BigDecimal price, List<TagDTO> tags) {
+    public CourseResponseDTO(Long id, String title, String certification, Modality modality,
+                             String duration, String description, BigDecimal price, List<TagDTO> tags) {
         this.id = id;
         this.title = title;
-        this.modality = modality;
         this.certification = certification;
+        this.modality = modality;
         this.duration = duration;
         this.description = description;
         this.price = price;

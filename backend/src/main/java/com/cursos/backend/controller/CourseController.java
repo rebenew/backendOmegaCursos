@@ -1,6 +1,7 @@
 package com.cursos.backend.controller;
 
-import com.cursos.backend.DTO.CourseDTO;
+import com.cursos.backend.DTO.CourseRequestDTO;
+import com.cursos.backend.DTO.CourseResponseDTO;
 import com.cursos.backend.DTO.TagDTO;
 import com.cursos.backend.model.Course;
 import com.cursos.backend.model.Tag;
@@ -22,34 +23,36 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    private CourseDTO mapToDTO(Course course) {
-        List<TagDTO> tags = course.getTags().stream()
+    private CourseResponseDTO mapToDTO(Course course) {
+        List<TagDTO> tagDTOs = course.getTags().stream()
                 .map(tag -> new TagDTO(tag.getId(), tag.getName()))
                 .collect(Collectors.toList());
 
-        return new CourseDTO(
+        return new CourseResponseDTO(
                 course.getId(),
                 course.getTitle(),
-                course.getModality(),
                 course.getCertification(),
+                course.getModality(),
                 course.getDuration(),
                 course.getDescription(),
                 course.getPrice(),
-                tags
+                tagDTOs
         );
     }
 
+
+
     @GetMapping
-    public ResponseEntity<List<CourseDTO>> getCourses(
+    public ResponseEntity<List<CourseResponseDTO>> getCourses(
             @RequestParam(required = false) List<String> tags,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String modality) {
         try {
             List<Course> courses = courseService.filterCourses(tags, title, modality);
-            List<CourseDTO> courseDTOs = courses.stream()
+            List<CourseResponseDTO> courseResponseDTOS = courses.stream()
                     .map(this::mapToDTO)
                     .collect(Collectors.toList());
-            return ResponseEntity.ok(courseDTOs);
+            return ResponseEntity.ok(courseResponseDTOS);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -61,7 +64,8 @@ public class CourseController {
     public ResponseEntity<?> getCourseById(@PathVariable Long id) {
         try {
             Course course = courseService.getCourseById(id);
-            return ResponseEntity.ok(course);
+            CourseResponseDTO dto = mapToDTO(course);
+            return ResponseEntity.ok(dto);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("El curso con ID " + id + " no existe.");
@@ -71,24 +75,18 @@ public class CourseController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> createCourse(@RequestBody CourseDTO courseDTO) {
-        try {
-            Course course = mapToEntity(courseDTO);
-            Course createdCourse = courseService.createCourse(course);
-            CourseDTO responseDTO = mapToDTO(createdCourse);  // evita el loop de JSON
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error al crear el curso: " + e.getMessage());
-        }
+    @PostMapping
+    public ResponseEntity<?> createCourse(@RequestBody CourseRequestDTO dto) {
+        Course course = mapToEntity(dto);
+        Course saved = courseService.createCourse(course);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToDTO(saved));  // <== aquí el cambio
     }
 
     @Autowired
     private TagRepository tagRepository;
 
-    private Course mapToEntity(CourseDTO dto) {
+    private Course mapToEntity(CourseRequestDTO dto) {
         Course course = new Course();
         course.setTitle(dto.getTitle());
         course.setModality(dto.getModality());
@@ -97,11 +95,10 @@ public class CourseController {
         course.setDescription(dto.getDescription());
         course.setPrice(dto.getPrice());
 
-        // Asignar tags por ID
         if (dto.getTags() != null) {
             Set<Tag> tags = dto.getTags().stream()
-                    .map(tagDTO -> tagRepository.findById(tagDTO.getId())
-                            .orElseThrow(() -> new IllegalArgumentException("Tag no encontrado: ID " + tagDTO.getId())))
+                    .map(tagId -> tagRepository.findById(tagId)
+                            .orElseThrow(() -> new RuntimeException("Tag no encontrado con ID: " + tagId)))
                     .collect(Collectors.toSet());
             course.setTags(tags);
         }
@@ -109,20 +106,24 @@ public class CourseController {
         return course;
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
+    public ResponseEntity<?> updateCourse(@PathVariable Long id, @RequestBody CourseRequestDTO requestDTO) {
         if (!courseService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("El curso con ID " + id + " no existe.");
         }
+
         try {
-            return ResponseEntity.ok(courseService.updateCourse(id, courseDetails));
+            Course course = mapToEntity(requestDTO);
+            Course updatedCourse = courseService.updateCourse(id, course);
+            CourseResponseDTO updatedDTO = mapToDTO(updatedCourse);
+            return ResponseEntity.ok(updatedDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error al actualizar el curso: " + e.getMessage());
         }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable Long id) {

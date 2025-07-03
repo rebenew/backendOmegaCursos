@@ -1,6 +1,6 @@
 package com.cursos.backend.service;
 
-import com.cursos.backend.DTO.CourseDTO;
+import com.cursos.backend.DTO.CourseResponseDTO;
 import com.cursos.backend.DTO.TagDTO;
 import com.cursos.backend.model.Course;
 import com.cursos.backend.model.Tag;
@@ -25,16 +25,16 @@ public class CourseService {
     @Autowired
     private TagRepository tagRepository;
 
-    private CourseDTO mapToDTO(Course course) {
+    private CourseResponseDTO mapToDTO(Course course) {
         List<TagDTO> tagDTOs = course.getTags().stream()
                 .map(tag -> new TagDTO(tag.getId(), tag.getName()))
                 .collect(Collectors.toList());
 
-        return new CourseDTO(
+        return new CourseResponseDTO(
                 course.getId(),
                 course.getTitle(),
-                course.getModality(),
                 course.getCertification(),
+                course.getModality(),
                 course.getDuration(),
                 course.getDescription(),
                 course.getPrice(),
@@ -102,40 +102,48 @@ public class CourseService {
     public Course updateCourse(Long id, Course courseDetails) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
+
         course.setTitle(courseDetails.getTitle());
         course.setModality(courseDetails.getModality());
         course.setCertification(courseDetails.getCertification());
         course.setDuration(courseDetails.getDuration());
         course.setDescription(courseDetails.getDescription());
         course.setPrice(courseDetails.getPrice());
+
         if (courseDetails.getTags() != null) {
-            Set<Tag> tags = new HashSet<>();
+            Set<Tag> resolvedTags = new HashSet<>();
             for (Tag tag : courseDetails.getTags()) {
-                Tag existingTag = tagRepository.findByName(tag.getName()).orElse(null);
-                tags.add(Objects.requireNonNullElseGet(existingTag, () -> tagRepository.save(new Tag(tag.getName()))));
+                if (tag.getId() != null) {
+                    Tag existingTag = tagRepository.findById(tag.getId())
+                            .orElseThrow(() -> new RuntimeException("Tag no encontrado con ID: " + tag.getId()));
+                    resolvedTags.add(existingTag);
+                }
             }
-            course.setTags(tags);
+            course.setTags(resolvedTags);
         }
+
         return courseRepository.save(course);
     }
 
-    @Transactional
-    public void deleteCourse(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
-        courseRepository.delete(course);
-    }
 
     @Transactional
-    public Course associateTagsToCourse(Long courseId, Set<Long> tagIds) {
-        Course course = courseRepository.findById(courseId)
-            .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + courseId));
-        Set<Tag> tags = new HashSet<>(tagRepository.findAllById(tagIds));
-        course.setTags(tags);
-        return courseRepository.save(course);
+        public void deleteCourse (Long id){
+            Course course = courseRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + id));
+            courseRepository.delete(course);
+        }
+
+        @Transactional
+        public Course associateTagsToCourse (Long courseId, Set < Long > tagIds){
+            Course course = courseRepository.findById(courseId)
+                    .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + courseId));
+            Set<Tag> tags = new HashSet<>(tagRepository.findAllById(tagIds));
+            course.setTags(tags);
+            return courseRepository.save(course);
+        }
+
+        public boolean existsById (Long id){
+            return courseRepository.existsById(id);
+        }
     }
-    
-    public boolean existsById(Long id) {
-        return courseRepository.existsById(id);
-    }
-}
+
