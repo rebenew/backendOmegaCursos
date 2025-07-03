@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -111,11 +112,7 @@ public class CourseService {
             Set<Tag> tags = new HashSet<>();
             for (Tag tag : courseDetails.getTags()) {
                 Tag existingTag = tagRepository.findByName(tag.getName()).orElse(null);
-                if (existingTag != null) {
-                    tags.add(existingTag);
-                } else {
-                    tags.add(tagRepository.save(new Tag(tag.getName())));
-                }
+                tags.add(Objects.requireNonNullElseGet(existingTag, () -> tagRepository.save(new Tag(tag.getName()))));
             }
             course.setTags(tags);
         }
