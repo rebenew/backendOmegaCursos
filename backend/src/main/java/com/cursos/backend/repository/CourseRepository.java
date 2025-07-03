@@ -5,21 +5,27 @@ import com.cursos.backend.model.Course;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-@Repository
-public interface CourseRepository extends JpaRepository<Course, Long> {
+import java.util.List;
 
-    @Query("SELECT DISTINCT c FROM Course c " +
-            "WHERE (:category IS NULL OR EXISTS (" +
-            "  SELECT 1 FROM c.tags t WHERE t.name = :category" +
-            ")) " +
-            "AND (:level IS NULL OR EXISTS (" +
-            "  SELECT 1 FROM c.tags t WHERE t.name = :level" +
-            "))")
-    List<Course> findByCategoryAndLevel(@Param("category") String category,
-            @Param("level") String level);
+@Repository
+public interface CourseRepository extends JpaRepository<Course,Long> {
+    @Query("""
+    SELECT DISTINCT c FROM Course c
+    LEFT JOIN c.tags t
+    WHERE (:tags IS NULL OR t.name IN :tags)
+      AND (:title IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :title, '%')))
+      AND (:modality IS NULL OR LOWER(c.modality) = LOWER(:modality))
+""")
+    List<Course> findCoursesWithFilters(
+            @Param("tags") List<String> tags,
+            @Param("title") String title,
+            @Param("modality") String modality
+    );
 
 }
