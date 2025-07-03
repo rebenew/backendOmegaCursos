@@ -1,5 +1,7 @@
 package com.cursos.backend.controller;
 
+import com.cursos.backend.DTO.CourseDTO;
+import com.cursos.backend.DTO.TagDTO;
 import com.cursos.backend.model.Course;
 import com.cursos.backend.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/courses")
@@ -16,15 +19,34 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping
-    public ResponseEntity<List<Course>> getCourses(
+    private CourseDTO mapToDTO(Course course) {
+        List<TagDTO> tags = course.getTags().stream()
+                .map(tag -> new TagDTO(tag.getId(), tag.getName()))
+                .collect(Collectors.toList());
 
+        return new CourseDTO(
+                course.getId(),
+                course.getTitle(),
+                course.getModality(),
+                course.getCertification(),
+                course.getDuration(),
+                course.getDescription(),
+                course.getPrice(),
+                tags
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CourseDTO>> getCourses(
             @RequestParam(required = false) List<String> tags,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String modality) {
         try {
             List<Course> courses = courseService.filterCourses(tags, title, modality);
-            return ResponseEntity.ok(courses);
+            List<CourseDTO> courseDTOs = courses.stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(courseDTOs);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -45,6 +67,7 @@ public class CourseController {
                     .body("Error interno del servidor.");
         }
     }
+
 
     @PostMapping
     public ResponseEntity<?> createCourse(@RequestBody Course course) {

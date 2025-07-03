@@ -1,5 +1,7 @@
 package com.cursos.backend.service;
 
+import com.cursos.backend.DTO.CourseDTO;
+import com.cursos.backend.DTO.TagDTO;
 import com.cursos.backend.model.Course;
 import com.cursos.backend.model.Tag;
 import com.cursos.backend.repository.CourseRepository;
@@ -21,6 +23,24 @@ public class CourseService {
 
     @Autowired
     private TagRepository tagRepository;
+
+    private CourseDTO mapToDTO(Course course) {
+        List<TagDTO> tagDTOs = course.getTags().stream()
+                .map(tag -> new TagDTO(tag.getId(), tag.getName()))
+                .collect(Collectors.toList());
+
+        return new CourseDTO(
+                course.getId(),
+                course.getTitle(),
+                course.getModality(),
+                course.getCertification(),
+                course.getDuration(),
+                course.getDescription(),
+                course.getPrice(),
+                tagDTOs
+        );
+    }
+
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
