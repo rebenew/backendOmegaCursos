@@ -3,6 +3,8 @@ package com.cursos.backend.controller;
 import com.cursos.backend.DTO.CourseDTO;
 import com.cursos.backend.DTO.TagDTO;
 import com.cursos.backend.model.Course;
+import com.cursos.backend.model.Tag;
+import com.cursos.backend.repository.TagRepository;
 import com.cursos.backend.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -68,17 +71,44 @@ public class CourseController {
         }
     }
 
-
     @PostMapping
-    public ResponseEntity<?> createCourse(@RequestBody Course course) {
+    public ResponseEntity<?> createCourse(@RequestBody CourseDTO courseDTO) {
         try {
+            Course course = mapToEntity(courseDTO);
             Course createdCourse = courseService.createCourse(course);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+            CourseDTO responseDTO = mapToDTO(createdCourse);  // evita el loop de JSON
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error al crear el curso: " + e.getMessage());
         }
     }
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    private Course mapToEntity(CourseDTO dto) {
+        Course course = new Course();
+        course.setTitle(dto.getTitle());
+        course.setModality(dto.getModality());
+        course.setCertification(dto.getCertification());
+        course.setDuration(dto.getDuration());
+        course.setDescription(dto.getDescription());
+        course.setPrice(dto.getPrice());
+
+        // Asignar tags por ID
+        if (dto.getTags() != null) {
+            Set<Tag> tags = dto.getTags().stream()
+                    .map(tagDTO -> tagRepository.findById(tagDTO.getId())
+                            .orElseThrow(() -> new IllegalArgumentException("Tag no encontrado: ID " + tagDTO.getId())))
+                    .collect(Collectors.toSet());
+            course.setTags(tags);
+        }
+
+        return course;
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
