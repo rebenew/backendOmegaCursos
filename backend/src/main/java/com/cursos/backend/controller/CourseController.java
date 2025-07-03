@@ -1,11 +1,13 @@
 package com.cursos.backend.controller;
 
+
 import com.cursos.backend.DTO.CourseDTO;
 import com.cursos.backend.DTO.TagDTO;
 import com.cursos.backend.model.Course;
 import com.cursos.backend.model.Tag;
 import com.cursos.backend.repository.TagRepository;
 import com.cursos.backend.service.CourseService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -138,6 +140,5 @@ public class CourseController {
                     .body("Error al eliminar el curso: " + e.getMessage());
         }
     }
+
 }
-
-

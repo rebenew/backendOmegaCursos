@@ -1,9 +1,19 @@
 package com.cursos.backend.controller;
 
+
+import com.cursos.backend.model.*;
+import com.cursos.backend.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
 import com.cursos.backend.model.Tag;
 import com.cursos.backend.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -11,10 +21,16 @@ import java.util.List;
 public class TagController {
 
     @Autowired
-    private TagRepository tagRepository;
+
+    private TagService tagService;
 
     @GetMapping
-    public List<Tag> getAllTags() {
-        return tagRepository.findAll();
+    public ResponseEntity<List<Tag>> getAllTags() {
+        try {
+            List<Tag> tags = tagService.getAllTags();
+            return ResponseEntity.ok(tags);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

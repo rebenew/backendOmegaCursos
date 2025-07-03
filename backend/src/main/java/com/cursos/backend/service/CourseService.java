@@ -129,12 +129,12 @@ public class CourseService {
     @Transactional
     public Course associateTagsToCourse(Long courseId, Set<Long> tagIds) {
         Course course = courseRepository.findById(courseId)
-            .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + courseId));
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado con id: " + courseId));
         Set<Tag> tags = new HashSet<>(tagRepository.findAllById(tagIds));
         course.setTags(tags);
         return courseRepository.save(course);
     }
-    
+
     public boolean existsById(Long id) {
         return courseRepository.existsById(id);
     }
